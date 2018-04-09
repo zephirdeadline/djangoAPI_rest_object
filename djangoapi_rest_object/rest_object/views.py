@@ -16,7 +16,7 @@ class Log():
 def check_login(func):
     def check(*args, **kwargs):
         try:
-            # user = args[0].user
+            #user = args[0].user
             return func(*args, **kwargs)
         except Exception as e:
             return HttpResponse(json.dumps({"error": str(e)}), content_type="application/json", status=401)
@@ -35,8 +35,9 @@ def json_from_post(request):
 
 @api_view(['POST', 'GET', 'PUT', 'DELETE'])
 @check_login
-def action(request,  Object, serializer=None, function_save_from_json=None, id_obj=None):
-    id_obj = int(id_obj)
+def action(request,  Object, serializer=None, id_obj=None):
+    if id_obj is not None:
+        id_obj = int(id_obj)
     if request.method == "GET":
         if id_obj is None:
             Log.send('GET get list ' + str(type(Object)), request)
@@ -47,11 +48,11 @@ def action(request,  Object, serializer=None, function_save_from_json=None, id_o
 
     elif request.method == "POST":
         Log.send('POST create', request)
-        return create(request, function_save_from_json, Object)
+        return create(request, serializer, Object)
 
     elif request.method == "PUT":
         Log.send('PUT update ' + str(type(Object)), request)
-        return update(request, id_obj, function_save_from_json, Object)
+        return update(request, id_obj, serializer, Object)
 
     elif request.method == "DELETE":
         Log.send('DELETE delete ' + str(type(Object)), request)
@@ -67,23 +68,28 @@ def delete(id_obj, Object):
         return return_bad_request(e)
 
 
-def update(request, id_obj, fonction_save_from_json, Object):
+def update(request, id_obj, serializer, Object):
     json = json_from_post(request)
     try:
         obj = Object.objects.get(id=id_obj)
-        fonction_save_from_json(request, json, obj)
+        serializer = serializer(obj, data=json)
+        if serializer.is_valid():
+            serializer.update(obj, serializer.validated_data)
+
         return Response({"status": "updated"})
     except Exception as e:
         Log.send('ERROR update ' + str(e))
         return return_bad_request(e)
 
 
-def create(request, function, Object):
+def create(request, serializer, Object):
     data = json_from_post(request)
     try:
         for json in data:
-            obj = Object()
-            function(request, json, obj)
+            serializer = serializer(data=json)
+            if serializer.is_valid():
+                serializer.create(serializer.validated_data, request.user)
+
         return Response({"status": "all are saved"})
     except Exception as e:
         Log.send('ERROR create ' + str(e))
@@ -95,9 +101,9 @@ def toList(request, serializer, Object):
     return Response(serial.data)
 
 
-def get(id_sms, serializer, Object):
+def get(id_obj, serializer, Object):
     try:
-        serial = serializer(Object.objects.get(id=id_sms))
+        serial = serializer(Object.objects.get(id=id_obj))
         return Response(serial.data)
     except Exception as e:
         Log.send('ERROR get id')
