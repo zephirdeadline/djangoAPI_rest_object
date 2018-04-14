@@ -86,9 +86,9 @@ def create(request, serializer, Object):
     data = json_from_post(request)
     try:
         for json in data:
-            serializer = serializer(data=json)
-            if serializer.is_valid():
-                serializer.create(serializer.validated_data, request.user)
+            serialize = serializer(data=json)
+            if serialize.is_valid():
+                serialize.create(serialize.validated_data, request.user)
 
         return Response({"status": "all are saved"})
     except Exception as e:
