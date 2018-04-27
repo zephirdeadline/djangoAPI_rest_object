@@ -6,20 +6,18 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.utils import json
 
+from cloud.serializers.smsSerializer import SmsSerializer
+from cloud.tools.helper import check_text
+from cloud.tools.log import Log
 
-class Log():
-    @staticmethod
-    def send(arg=None, arg2=None):
-        pass
+from cloudmessaging.tools import send_notif_event, send_notif_reminder
 
 
 def check_login(func):
     def check(*args, **kwargs):
-        try:
-            #user = args[0].user
-            return func(*args, **kwargs)
-        except Exception as e:
-            return HttpResponse(json.dumps({"error": str(e)}), content_type="application/json", status=401)
+        if args[0].user.is_anonymous:
+            return Response({"status": "You aren't authorized"}, status=status.HTTP_401_UNAUTHORIZED)
+        return func(*args, **kwargs)
     return check
 
 
@@ -48,7 +46,7 @@ def action(request,  Object, serializer=None, id_obj=None):
 
     elif request.method == "POST":
         Log.send('POST create', request)
-        return create(request, serializer, Object)
+        return create(request, serializer)
 
     elif request.method == "PUT":
         Log.send('PUT update ' + str(type(Object)), request)
@@ -72,25 +70,30 @@ def update(request, id_obj, serializer, Object):
     json = json_from_post(request)
     try:
         obj = Object.objects.get(id=id_obj)
-        serializer = serializer(obj, data=json)
-        if serializer.is_valid():
-            serializer.update(obj, serializer.validated_data)
-
+        serialize = serializer(obj, data=json)
+        if serialize.is_valid():
+            serialize.update(obj, serialize.validated_data)
+        else:
+            return return_bad_request(serialize.errors)
         return Response({"status": "updated"})
     except Exception as e:
         Log.send('ERROR update ' + str(e))
         return return_bad_request(e)
 
 
-def create(request, serializer, Object):
+def create(request, serializer):
     data = json_from_post(request)
     try:
         for json in data:
             serialize = serializer(data=json)
             if serialize.is_valid():
-                serialize.create(serialize.validated_data, request.user)
+                if serialize.create(serialize.validated_data, user=request.user):
+                    return Response({"status": "all are saved"})
+                else:
+                    return return_bad_request({"status": "Don't respect constraite"})
+            else:
+                return return_bad_request(serialize.errors)
 
-        return Response({"status": "all are saved"})
     except Exception as e:
         Log.send('ERROR create ' + str(e))
         return return_bad_request(e)
