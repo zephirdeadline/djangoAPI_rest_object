@@ -16,7 +16,7 @@ class CarSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'maxspeed')
 
     def update(self, instance, validated_data):
-        self.create_reminder(instance, validated_data)
+        self.create_car(instance, validated_data)
         instance.tags.clear()
         self.add_tags(instance, validated_data)
         instance.save()
@@ -26,7 +26,7 @@ class CarSerializer(serializers.ModelSerializer):
     def create(self, validated_data, user=None):
         r = Car()
         r.user = user
-        self.create_reminder(r, validated_data)
+        self.create_car(r, validated_data)
         r.save()
         self.add_tags(r, validated_data)
         r.save()
