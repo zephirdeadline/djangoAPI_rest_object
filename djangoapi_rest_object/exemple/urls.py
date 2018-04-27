@@ -23,4 +23,5 @@ urlpatterns = [
     url(r'car/$', views.car, name='car'),
     url(r'car/(?P<id_car>\d+)$', views.car, name='carid'),
 
+
 ]

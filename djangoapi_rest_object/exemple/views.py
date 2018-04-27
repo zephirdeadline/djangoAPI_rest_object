@@ -11,25 +11,22 @@ from rest_object.views import action
 class CarSerializer(serializers.ModelSerializer):
     #tags = TagSerializer(many=True)
     id = models.IntegerField(default=1)
+
     class Meta:
         model = Car
         fields = ('id', 'name', 'maxspeed')
 
     def update(self, instance, validated_data):
-        self.create_car(instance, validated_data)
-        instance.tags.clear()
-        self.add_tags(instance, validated_data)
-        instance.save()
-
+        r = self.create_car(instance, validated_data)
+        r.save()
         return instance
 
     def create(self, validated_data, user=None):
         r = Car()
-        r.user = user
+        # r.user = user
         self.create_car(r, validated_data)
         r.save()
-        self.add_tags(r, validated_data)
-        r.save()
+        return r
 
     def create_car(self, instance, validated_data):
         instance.name = validated_data.get('name')

@@ -1,21 +1,16 @@
-from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
-from rest_framework import viewsets, status
+
+from rest_framework import status
 from rest_framework.decorators import api_view
 
 from rest_framework.response import Response
 from rest_framework.utils import json
-
-from cloud.serializers.smsSerializer import SmsSerializer
-from cloud.tools.helper import check_text
-from cloud.tools.log import Log
-
-from cloudmessaging.tools import send_notif_event, send_notif_reminder
+from djangoapi_rest_object.settings import REQUIRE_API_AUTHORISATION, IS_GLOBAL_DATA
+from rest_object.tools.log import Log
 
 
 def check_login(func):
     def check(*args, **kwargs):
-        if args[0].user.is_anonymous:
+        if REQUIRE_API_AUTHORISATION and args[0].user.is_anonymous:
             return Response({"status": "You aren't authorized"}, status=status.HTTP_401_UNAUTHORIZED)
         return func(*args, **kwargs)
     return check
@@ -100,7 +95,10 @@ def create(request, serializer):
 
 
 def toList(request, serializer, Object):
-    serial = serializer(Object.objects.filter(user=request.user), many=True)
+    if not IS_GLOBAL_DATA:
+        serial = serializer(Object.objects.filter(user=request.user), many=True)
+    else:
+        serial = serializer(Object.objects.all(), many=True)
     return Response(serial.data)
 
 

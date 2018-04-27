@@ -28,12 +28,24 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
+REQUIRE_API_AUTHORISATION = True
+IS_GLOBAL_DATA = True
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    ),
+}
+
 # Application definition
 
 INSTALLED_APPS = [
     'rest_object',
     'rest_framework',
+    'rest_framework_jwt',
     'exemple',
+    'rest_framework.authtoken',
+    'djoser',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
