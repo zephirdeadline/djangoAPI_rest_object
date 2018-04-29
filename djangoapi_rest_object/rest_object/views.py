@@ -4,13 +4,13 @@ from rest_framework.decorators import api_view
 
 from rest_framework.response import Response
 from rest_framework.utils import json
-from djangoapi_rest_object.settings import REQUIRE_API_AUTHORISATION, IS_GLOBAL_DATA
+from django.conf import settings
 from rest_object.tools.log import Log
 
 
 def check_login(func):
     def check(*args, **kwargs):
-        if REQUIRE_API_AUTHORISATION and args[0].user.is_anonymous:
+        if settings.REQUIRE_API_AUTHORISATION and args[0].user.is_anonymous:
             return Response({"status": "You aren't authorized"}, status=status.HTTP_401_UNAUTHORIZED)
         return func(*args, **kwargs)
     return check
@@ -95,7 +95,7 @@ def create(request, serializer):
 
 
 def toList(request, serializer, Object):
-    if not IS_GLOBAL_DATA:
+    if not settings.IS_GLOBAL_DATA:
         serial = serializer(Object.objects.filter(user=request.user), many=True)
     else:
         serial = serializer(Object.objects.all(), many=True)
