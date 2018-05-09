@@ -34,5 +34,6 @@ class CarSerializer(serializers.ModelSerializer):
         return instance
 
 
-def car(request, id_car=None):
-    return action(request, Car, CarSerializer, id_car)
+def car(request, id_car=None, cursor=None, amount=None):
+    return action(request, Car, CarSerializer, id_car, cursor, amount)
+

@@ -28,16 +28,23 @@ def json_from_post(request):
 
 @api_view(['POST', 'GET', 'PUT', 'DELETE'])
 @check_login
-def action(request,  Object, serializer=None, id_obj=None):
+def action(request,  Object, serializer, id_obj=None, cursor=None, amount=None):
     if id_obj is not None:
         id_obj = int(id_obj)
+    if cursor is not None:
+        cursor = int(cursor)
+        amount = int(amount)
     if request.method == "GET":
         if id_obj is None:
-            Log.send('GET get list ' + str(type(Object)), request)
-            return toList(request, serializer, Object)
+            if cursor is not None and amount is not None:
+                Log.send('GET get list with amount ' + str(type(Object)), request)
+                return toListWithAmount(cursor, amount, request, serializer, Object)
+            else:
+                Log.send('GET get list ' + str(type(Object)), request)
+                return toList(request, serializer, Object)
         else:
             Log.send('GET get id ' + str(type(Object)), request)
-            return get(id_obj, serializer, Object)
+            return get(id_obj, request, serializer, Object)
 
     elif request.method == "POST":
         Log.send('POST create', request)
@@ -50,6 +57,8 @@ def action(request,  Object, serializer=None, id_obj=None):
     elif request.method == "DELETE":
         Log.send('DELETE delete ' + str(type(Object)), request)
         return delete(id_obj, Object)
+    else:
+        return_bad_request("Bad argument")
 
 
 def delete(id_obj, Object):
@@ -102,9 +111,22 @@ def toList(request, serializer, Object):
     return Response(serial.data)
 
 
-def get(id_obj, serializer, Object):
+
+def toListWithAmount(cursor, amount, request, serializer, Object):
+    if not settings.IS_GLOBAL_DATA:
+        serial = serializer(Object.objects.filter(user=request.user), many=True)
+    else:
+        serial = serializer(Object.objects.all(), many=True)
+    return Response(serial.data[cursor:cursor+amount])
+
+
+
+def get(id_obj, request, serializer, Object):
     try:
-        serial = serializer(Object.objects.get(id=id_obj))
+        if not settings.IS_GLOBAL_DATA:
+            serial = serializer(Object.objects.get(user=request.user, id=id_obj))
+        else:
+            serial = serializer(Object.objects.get(id=id_obj))
         return Response(serial.data)
     except Exception as e:
         Log.send('ERROR get id')
