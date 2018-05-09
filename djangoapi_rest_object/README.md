@@ -61,8 +61,9 @@ def car(request, id_car=None):
 ```
 4- Add 2 url for you model:
 ```
-url(r'car/$', views.car, name='car'), # 'car'
+url(r'car/$', views.car, name='car'), # 'car' 
 url(r'car/(?P<id_car>\d+)$', views.car, name='carid'),
+url(r'car/(?P<cursor>\d+)/(?P<amount>\d+)$', views.car, name='caramount'),
 ```
 
 ## API usage
