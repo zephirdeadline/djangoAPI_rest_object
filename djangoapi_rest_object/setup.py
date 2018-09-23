@@ -26,7 +26,7 @@ setup(
     packages=find_packages(),
  
     # votre pti nom
-    author="w4pity",
+    author="Melvyn Petrocchi",
  
     # Votre email, sachant qu'il sera publique visible, avec tous les risques
     # que ça implique.
@@ -64,12 +64,12 @@ setup(
     # comme il le sent. Il y en a qui ne mettent rien.
     classifiers=[
         "Programming Language :: Python",
-        "Development Status :: 1 - Planning",
+        "Development Status :: Released",
         "License :: OSI Approved",
         "Natural Language :: French",
         "Operating System :: OS Independent",
         "Programming Language :: Python :: 3.6",
-        "Topic :: Communications",
+        "Topic :: API",
     ],
  
  

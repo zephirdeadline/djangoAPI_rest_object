@@ -1,5 +1,5 @@
 
 
 class Log():
-    def send(lol, lol1):
+    def send(url, error):
         pass
