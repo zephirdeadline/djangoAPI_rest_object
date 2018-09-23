@@ -215,8 +215,5 @@ Use Djoser documentation to add the identification in your project:
 
 [Documention link](https://djoser.readthedocs.io/en/stable/)
 
-# Fast using of identification
-
-Comming...
 
 
