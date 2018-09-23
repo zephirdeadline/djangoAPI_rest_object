@@ -1,3 +1,5 @@
+DOC: https://drive.w4pity.fr/drive/Rest_object_documentation.pdf
+
 ## DEPENDANCE
 
 - Django
