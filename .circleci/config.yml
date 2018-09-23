@@ -54,6 +54,6 @@ jobs:
           path: test-reports
           destination: test-reports
 
-      - notify:
-          webhook:
-             - url: https://discordapp.com/api/webhooks/493527954874171394/02dsjqYFThviKLJzn5gnLjNq2AFHxKMXiInvU5FpSaLMDs-2WtHNdX8O7R7V59vjyg5w
+notify:
+      webhook:
+          - url: https://discordapp.com/api/webhooks/493527954874171394/02dsjqYFThviKLJzn5gnLjNq2AFHxKMXiInvU5FpSaLMDs-2WtHNdX8O7R7V59vjyg5w
