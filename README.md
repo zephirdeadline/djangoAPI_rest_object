@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/zephirdeadline/djangoAPI_rest_object.svg?style=svg)](https://circleci.com/gh/zephirdeadline/djangoAPI_rest_object)
+
 DOC: https://drive.w4pity.fr/drive/Rest_object_documentation.pdf
 
 ## DEPENDANCE
