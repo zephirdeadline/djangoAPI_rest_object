@@ -64,7 +64,7 @@ setup(
     # comme il le sent. Il y en a qui ne mettent rien.
     classifiers=[
         "Programming Language :: Python",
-        "Development Status :: Released",
+        "Development Status :: Beta",
         "License :: OSI Approved",
         "Natural Language :: French",
         "Operating System :: OS Independent",
