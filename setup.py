@@ -69,7 +69,7 @@ setup(
         "Natural Language :: French",
         "Operating System :: OS Independent",
         "Programming Language :: Python :: 3.6",
-        "Topic :: API",
+        "Topic :: Software Development :: Libraries :: Python Modules",
     ],
  
  
