@@ -5,7 +5,7 @@ from rest_framework import serializers
 from django.db import models
 
 from exemple.models import Car
-from rest_object.views import action
+from rest_object.view import action
 
 
 class CarSerializer(serializers.ModelSerializer):
@@ -35,5 +35,5 @@ class CarSerializer(serializers.ModelSerializer):
 
 
 def car(request, id_car=None, cursor=None, amount=None):
-    return action(request, Car, CarSerializer, id_car, cursor, amount)
+    return action(request, Car, CarSerializer, id_car, cursor, amount, is_restricted=False, linked_to_user=False)
 
