@@ -147,18 +147,29 @@ BODY:
 
 ```
 [
-	{
-		"sender": "Jacque",
-		"date": "2008-04-10 11:47:58-05",
-		"text": "je suis un sms"
-	},
-	...
+    saved: [
+        {
+            "sender": "Jacque",
+            "date": "2008-04-10 11:47:58-05",
+            "text": "je suis un sms"
+        },
+        ...
+    ],
+    fails: [
+    ...
+    ]
+	
 ]
 ```
 
 RESPONSE:
 ```
-{"status": "..."}
+	{
+	    "id": 1,
+		"sender": "Jacque",
+		"date": "2008-04-10 11:47:58-05",
+		"text": "je suis un sms"
+	}
 ```
 
 # Modify a sms :
@@ -181,7 +192,7 @@ BODY:
 		"sender": "Jacque",
 		"date": "2008-04-10 11:47:58-05",
 		"text": "je suis un sms"
-	},
+	}
 	
 
 ```
@@ -189,7 +200,13 @@ BODY:
 RESPONSE:
 
 ```
-{"status": "..."}
+
+	{
+	    "id": 5,
+		"sender": "Jacque",
+		"date": "2008-04-10 11:47:58-05",
+		"text": "je suis un sms"
+	}
 ```
 
 # Delete a sms of a specific user:
