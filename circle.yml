@@ -1,0 +1,5 @@
+    test:
+        override:
+            - coverage run --source=exemple,rest_object manage.py test
+        post:
+            - coveralls
