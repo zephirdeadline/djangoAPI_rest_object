@@ -34,6 +34,8 @@ IS_GLOBAL_DATA = True
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
+
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication'
     ),
 }
 

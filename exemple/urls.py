@@ -23,6 +23,9 @@ urlpatterns = [
     url(r'car/$', views.car, name='car'),
     url(r'car/(?P<id_car>\d+)$', views.car, name='carid'),
     url(r'car/(?P<cursor>\d+)/(?P<amount>\d+)$', views.car, name='caramount'),
+    url(r'carwithauth/$', views.carwithauth, name='car'),
 
-
+    url(r'caruser/$', views.caruser, name='car'),
+    url(r'caruser/(?P<id_car>\d+)$', views.caruser, name='carid'),
+    url(r'caruser/(?P<cursor>\d+)/(?P<amount>\d+)$', views.caruser, name='caramount'),
 ]
