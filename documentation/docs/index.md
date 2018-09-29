@@ -13,10 +13,8 @@ DOC: https://drive.w4pity.fr/drive/Rest_object_documentation.pdf
 ## INSTALLATION
 
 in settings:
-
+Configure REST_FRAMEWORK for the authentification you want
 ```
-REQUIRE_API_AUTHORISATION = True
-IS_GLOBAL_DATA = True
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -24,13 +22,7 @@ REST_FRAMEWORK = {
     ),
 }
 ```
-Explication:
-
-REQUIRE_API_AUTHORISATION = True If you want use an Authorization with your API
-IS_GLOBAL_DATA = True If your data is NOT attached to a user
-
-Warning: Both False are not compatible.
-
+Tips: You can also you JWT
 
 Add on your INSTALL_APP:
 
@@ -59,8 +51,8 @@ Usage:
 2- Create your class serializer for this model ('CarSerializer' for example)
 3- Create a view for this model like this:
 ```
-def car(request, id_car=None):
-    return action(request, Car, CarSerializer, id_car)
+def car(request, id_car=None, cursor=None, amount=None):
+    return action(request, Car, CarSerializer, id_car, cursor, amount, is_restricted=False, linked_to_user=False)
 
 ```
 4- Add 2 url for you model:
@@ -70,9 +62,16 @@ url(r'car/(?P<id_car>\d+)$', views.car, name='carid'),
 url(r'car/(?P<cursor>\d+)/(?P<amount>\d+)$', views.car, name='caramount'),
 ```
 
+Tips: An Activity example is avaible in the source code
+
 ## API usage
 
+Tips: Token can be replaced by JWT
+
 Model example:
+
+
+User is a ForeignKey, so is_restricted ans linked_to_user need to be set as True
 
 ```
 class Sms(models.Model):
@@ -82,10 +81,10 @@ class Sms(models.Model):
     date = models.DateTimeField()
 ```
 
-Add Header Token/jwt only if REQUIRE_API_AUTHORISATION = True
+Add Header Token/jwt only if you need it
 
 
-# Get a list of sms of a specific user:
+### QUERY
 
 > GET http://localhost:8000/api/sms/
 
@@ -110,7 +109,7 @@ RESPONSE:
 ]
 ```
 
-# Get a sms :
+### GET 
 
 > GET http://localhost:8000/api/sms/{id}
 
@@ -132,7 +131,7 @@ RESPONSE:
 ```
 
 
-### Create sms for a specific user:
+### POST
 
 > POST http://localhost:8000/api/sms/
 
@@ -172,7 +171,9 @@ RESPONSE:
 	}
 ```
 
-# Modify a sms :
+
+### PUT 
+
 
 > PUT http://localhost:8000/api/sms/{id}
 
@@ -209,7 +210,7 @@ RESPONSE:
 	}
 ```
 
-# Delete a sms of a specific user:
+### Delete
 
 > DELETE http://localhost:8000/api/sms/{id}
 
