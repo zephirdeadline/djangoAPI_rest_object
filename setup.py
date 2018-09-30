@@ -23,7 +23,8 @@ setup(
     # python recursivement dans le dossier courant.
     # C'est pour cette raison que l'on a tout mis dans un seul dossier:
     # on peut ainsi utiliser cette fonction facilement
-    packages=find_packages(),
+    packages=['rest_object', 'rest_object.actions', 'rest_object.tools'],
+    #find_packages(),
  
     # votre pti nom
     author="Melvyn Petrocchi",
