@@ -1,7 +1,6 @@
 from rest_framework import status
 from rest_framework.response import Response
 
-from djangoapi_rest_object import settings
 
 
 def check_login(func):
